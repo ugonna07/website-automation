@@ -1,0 +1,51 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+import pytest
+
+# Setup the WebDriver (Chrome and Firefox)
+def setup_browser(browser="chrome"):
+    if browser == "chrome":
+        driver = webdriver.Chrome(executable_path="/path/to/chromedriver")
+    elif browser == "firefox":
+        driver = webdriver.Firefox(executable_path="/path/to/geckodriver")
+    return driver
+
+# Test: Open the website and perform use cases
+def test_website_automation(browser="chrome"):
+    driver = setup_browser(browser)
+    driver.get("https://www.amazon.ca")
+
+    # Use Case 1: Search for a product
+    search_box = driver.find_element(By.ID, "twotabsearchtextbox")
+    search_box.send_keys("laptop")
+    search_box.send_keys(Keys.RETURN)
+    time.sleep(2)
+
+    # Use Case 2: Click on a product
+    product = driver.find_element(By.CSS_SELECTOR, ".s-main-slot .s-result-item h2 a")
+    product.click()
+    time.sleep(2)
+
+    # Use Case 3: Add product to cart
+    add_to_cart_button = driver.find_element(By.ID, "add-to-cart-button")
+    add_to_cart_button.click()
+    time.sleep(2)
+
+    # Use Case 4: Go to the cart
+    cart_button = driver.find_element(By.ID, "nav-cart")
+    cart_button.click()
+    time.sleep(2)
+
+    # Use Case 5: Checkout (or proceed to checkout)
+    proceed_button = driver.find_element(By.NAME, "proceedToRetailCheckout")
+    proceed_button.click()
+    time.sleep(2)
+
+    # Closing the browser
+    driver.quit()
+
+# Run the test for both browsers
+if __name__ == "__main__":
+    pytest.main()
